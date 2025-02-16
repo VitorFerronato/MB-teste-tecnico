@@ -1,8 +1,9 @@
 <template>
   <CardForm
     title="Pessoa Física"
-    step="2"
+    step="2-people"
     @handleValidateForm="handleValidateForm"
+    @handleReturnPage="handleReturnPage"
   >
     <template v-slot:content>
       <MBTextField v-model="name" title="Nome" class="mt-4" />
@@ -21,7 +22,8 @@
 import MBTextField from "@/design_system/components/MBTextField.vue";
 import CardForm from "@/components/CardForm.vue";
 
-import { ref } from "vue";
+import { ref, defineEmits } from "vue";
+const emits = defineEmits(["returnPage"]);
 
 const name = ref();
 const CPF = ref();
@@ -30,5 +32,11 @@ const phone = ref();
 
 const handleValidateForm = () => {
   console.log("validar form");
+};
+
+const handleReturnPage = () => {
+  const toStep = "1";
+
+  emits("returnPage", toStep);
 };
 </script>

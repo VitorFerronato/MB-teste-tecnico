@@ -1,8 +1,9 @@
 <template>
   <CardForm
     title="Pessoa Jurídica"
-    step="2"
+    step="2-company"
     @handleValidateForm="handleValidateForm"
+    @handleReturnPage="handleReturnPage"
   >
     <template v-slot:content>
       <MBTextField v-model="businessName" title="Razão social" class="mt-4" />
@@ -21,7 +22,8 @@
 import MBTextField from "@/design_system/components/MBTextField.vue";
 import CardForm from "@/components/CardForm.vue";
 
-import { ref } from "vue";
+import { ref, defineEmits } from "vue";
+const emits = defineEmits(["returnPage"]);
 
 const businessName = ref();
 const CNPJ = ref();
