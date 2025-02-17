@@ -1,5 +1,5 @@
 <template>
-  <CardForm title="Seja bem vindo(a)" step="1" @formIsValid="teste">
+  <CardForm title="Seja bem vindo(a)" step="1" @formIsValid="advanceNextStep">
     <template v-slot:content>
       <MBTextField
         v-model="form.email"
@@ -32,14 +32,17 @@ import CardForm from "@/components/CardForm.vue";
 
 import { ref, defineEmits } from "vue";
 
-const emits = defineEmits(["advanceNextStep"]);
+const emits = defineEmits(["advanceNextStep", "handleReturnPage"]);
 
 const form = ref({
   email: "",
   selectedType: "Pessoa Física",
 });
 
-const teste = () => {
-  console.log("teste", form.value);
+const advanceNextStep = () => {
+  const toStep =
+    form.value.selectedType == "Pessoa Física" ? "2-people" : "2-company";
+
+  emits("advanceNextStep", { form: form.value, from: "1", to: toStep });
 };
 </script>

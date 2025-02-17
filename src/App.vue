@@ -1,5 +1,9 @@
 <template>
   <div id="app">
+    <!-- <div class="d-flex flex-column">
+      <span v-for="(step, index) in steps" :key="index"> {{ step }} </span>
+    </div> -->
+
     <Step1EmailView
       v-if="currentStep.step == '1'"
       :hasReturnButton="false"
@@ -8,14 +12,27 @@
 
     <Step2PeopleView
       v-if="currentStep.step == '2-people'"
-      @returnPage="returnPage"
+      @advanceNextStep="updateNextStep"
+      @handleReturnPage="returnPage"
     />
 
-    <Step2CompanyView v-if="currentStep.step == '2-company'" />
+    <Step2CompanyView
+      v-if="currentStep.step == '2-company'"
+      @advanceNextStep="updateNextStep"
+      @handleReturnPage="returnPage"
+    />
 
-    <Step3PasswordView v-if="currentStep.step == '3'" />
+    <Step3PasswordView
+      v-if="currentStep.step == '3'"
+      @advanceNextStep="updateNextStep"
+      @handleReturnPage="returnPage"
+    />
 
-    <Step4ReviewView v-if="currentStep.step == '4'" />
+    <Step4ReviewView
+      v-if="currentStep.step == '4'"
+      :registrationData="steps"
+      @handleReturnPage="returnPage"
+    />
   </div>
 </template>
 
@@ -47,22 +64,35 @@ const steps = ref([
   },
   {
     step: "4",
-    data: [],
   },
 ]);
-
-const currentStep = ref(steps.value[3]);
+const currentStep = ref(steps.value[0]);
 
 const updateNextStep = (data) => {
-  const foundedStep = steps.value.find((el) => el.step == data.currentStep);
-  foundedStep.data = data;
+  const currentIndex = steps.value.findIndex((step) => step.step === data.from);
 
-  if (data.currentStep == "1") currentStep.value = steps.value[1];
+  if (currentIndex !== -1) steps.value[currentIndex].data = data.form;
+
+  const nextStep = steps.value.find((step) => step.step === data.to);
+
+  if (nextStep) currentStep.value = nextStep;
 };
 
-const returnPage = (to) => {
-  console.log("aqui", to);
-  currentStep.value = currentStep.value[to];
+// Return page logic ===
+const returnPage = (pageTo) => {
+  if (!pageTo) return;
+
+  if (pageTo === 2) handlePageTwo();
+  else resetStepData(pageTo - 1);
+};
+const resetStepData = (stepIndex) => {
+  steps.value[stepIndex].data = [];
+  currentStep.value = steps.value[stepIndex];
+};
+const handlePageTwo = () => {
+  const isPessoaFisica = steps.value[0].data?.selectedType === "Pessoa Física";
+  const targetIndex = isPessoaFisica ? 1 : 2;
+  resetStepData(targetIndex);
 };
 </script>
 

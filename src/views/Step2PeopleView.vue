@@ -2,8 +2,8 @@
   <CardForm
     title="Pessoa Física"
     step="2"
-    @formIsValid="teste"
-    @handleReturnPage="handleReturnPage"
+    @formIsValid="advanceNextStep"
+    @handleReturnPage="emits('handleReturnPage', 1)"
   >
     <template v-slot:content>
       <MBTextField
@@ -13,21 +13,21 @@
         class="mt-4"
       />
       <MBTextField
-        v-model="form.CPF"
+        v-model="form.registration"
         :rules="['rulesRequired', 'rulesCPF']"
         v-mask="'###.###.###-##'"
         title="CPF"
         class="mt-4"
       />
       <MBTextField
-        v-model="form.birthDate"
+        v-model="form.creationDate"
         :rules="['rulesRequired', 'rulesBirthDate']"
         v-mask="'##/##/####'"
         title="Data de nascimento"
         class="mt-4"
       />
       <MBTextField
-        v-model="form.phone"
+        v-model="form.phoneNumber"
         :rules="['rulesRequired', 'rulesPhoneNumber']"
         v-mask="'(##) #####-####'"
         title="Telefone"
@@ -42,16 +42,16 @@ import MBTextField from "@/design_system/components/MBTextField.vue";
 import CardForm from "@/components/CardForm.vue";
 
 import { ref, defineEmits } from "vue";
-const emits = defineEmits(["returnPage"]);
+const emits = defineEmits(["advanceNextStep", "handleReturnPage"]);
 
 const form = ref({
   name: "",
-  CPF: "",
-  birthDate: "",
-  phone: "",
+  registration: "",
+  creationDate: "",
+  phoneNumber: "",
 });
 
-const teste = () => {
-  console.log("validar form", form.value);
+const advanceNextStep = () => {
+  emits("advanceNextStep", { form: form.value, from: "2-people", to: "3" });
 };
 </script>

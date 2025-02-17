@@ -3,22 +3,23 @@
     <p class="text-caption mb-2">
       Etapa <span class="color-destaq">{{ step }}</span> de 4
     </p>
-    <p class="title">{{ title }}</p>
+    <p class="title" style="width: max-content">{{ title }}</p>
 
     <slot name="content"></slot>
 
     <div class="d-flex align-center ga-2">
       <MBButton
         v-if="hasReturnButton"
+        @click="$emit('handleReturnPage')"
+        :class="['mt-4', hasReturnButton ? 'w-50' : 'w-100']"
         title="Voltar"
         outlined
-        :class="['mt-4', hasReturnButton ? 'w-50' : 'w-100']"
-        @click="$emit('handleReturnPage')"
+        type="button"
       />
       <MBButton
+        :class="['mt-4', hasReturnButton ? 'w-50' : 'w-100']"
         title="Confirmar"
         type="submit"
-        :class="['mt-4', hasReturnButton ? 'w-50' : 'w-100']"
       />
     </div>
   </form>
