@@ -1,19 +1,40 @@
 <template>
   <CardForm
     title="Pessoa Jurídica"
-    step="2-company"
-    @handleValidateForm="handleValidateForm"
+    step="2"
+    @formIsValid="teste"
     @handleReturnPage="handleReturnPage"
   >
     <template v-slot:content>
-      <MBTextField v-model="businessName" title="Razão social" class="mt-4" />
-      <MBTextField v-model="CNPJ" title="CNPJ" class="mt-4" />
-      <MBTextField
-        v-model="openingDate"
-        title="Data de abertura"
-        class="mt-4"
-      />
-      <MBTextField v-model="phoneNumber" title="Telefone" class="mt-4" />
+      <form>
+        <MBTextField
+          v-model="form.businessName"
+          :rules="['rulesRequired']"
+          title="Razão social"
+          class="mt-4"
+        />
+        <MBTextField
+          v-model="form.CNPJ"
+          :rules="['rulesRequired', 'rulesCNPJ']"
+          v-mask="'##.###.###/####-##'"
+          title="CNPJ"
+          class="mt-4"
+        />
+        <MBTextField
+          v-model="form.openingDate"
+          :rules="['rulesRequired', 'rulesOpeningDate']"
+          v-mask="'##/##/####'"
+          title="Data de abertura"
+          class="mt-4"
+        />
+        <MBTextField
+          v-model="form.phoneNumber"
+          :rules="['rulesRequired', 'rulesPhoneNumber']"
+          v-mask="'(##) #####-####'"
+          title="Telefone"
+          class="mt-4"
+        />
+      </form>
     </template>
   </CardForm>
 </template>
@@ -25,12 +46,14 @@ import CardForm from "@/components/CardForm.vue";
 import { ref, defineEmits } from "vue";
 const emits = defineEmits(["returnPage"]);
 
-const businessName = ref();
-const CNPJ = ref();
-const openingDate = ref();
-const phoneNumber = ref();
+const form = ref({
+  businessName: "",
+  CNPJ: "",
+  openingDate: "",
+  phoneNumber: "",
+});
 
-const handleValidateForm = () => {
-  console.log("validar form");
+const teste = () => {
+  console.log("validar form", form.value);
 };
 </script>

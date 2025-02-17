@@ -1,5 +1,10 @@
 import { createApp } from "vue";
-import "./design_system/main.scss";
 import App from "./App.vue";
+import VueTheMask from "vue-the-mask";
+import "./design_system/main.scss";
 
-createApp(App).mount("#app");
+const app = createApp(App);
+
+app.use(VueTheMask);
+
+app.mount("#app");

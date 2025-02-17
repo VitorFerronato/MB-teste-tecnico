@@ -1,11 +1,13 @@
 <template>
-  <CardForm
-    title="Senha de acesso"
-    step="3"
-    @handleValidateForm="handleValidateForm"
-  >
+  <CardForm title="Senha de acesso" step="3" @formIsValid="teste">
     <template v-slot:content>
-      <MBTextField v-model="password" title="Sua senha" class="mt-4" />
+      <MBTextField
+        v-model="password"
+        :rules="['rulesRequired', 'rulesPassword']"
+        title="Sua senha"
+        type="password"
+        class="mt-4"
+      />
     </template>
   </CardForm>
 </template>
@@ -18,9 +20,7 @@ import { ref } from "vue";
 
 const password = ref();
 
-const handleValidateForm = () => {
-  console.log("validar form");
+const teste = () => {
+  console.log("validar form", password.value);
 };
 </script>
-
-<style lang="scss" scoped></style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <form @submit.prevent="validateForm" class="card">
     <p class="text-caption mb-2">
       Etapa <span class="color-destaq">{{ step }}</span> de 4
     </p>
@@ -17,17 +17,17 @@
       />
       <MBButton
         title="Confirmar"
+        type="submit"
         :class="['mt-4', hasReturnButton ? 'w-50' : 'w-100']"
-        @click="$emit('handleValidateForm')"
       />
     </div>
-  </div>
+  </form>
 </template>
 
 <script setup>
 import MBButton from "@/design_system/components/MBButton.vue";
 
-import { defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits, provide, ref } from "vue";
 
 defineProps({
   step: {
@@ -42,11 +42,32 @@ defineProps({
 
   hasReturnButton: {
     type: Boolean,
-    default: false,
+    default: true,
   },
 });
 
-defineEmits(["handleReturnPage", "handleValidateForm"]);
+const emits = defineEmits(["handleReturnPage", "handleValidateForm"]);
+
+const inputs = ref([]);
+
+const registerInput = (input) => {
+  inputs.value.push(input);
+};
+
+const validateForm = () => {
+  let isValid = true;
+
+  inputs.value.forEach((input) => {
+    const valid = input.validate();
+    if (!valid) {
+      isValid = false;
+    }
+  });
+
+  if (isValid) emits("formIsValid");
+};
+
+provide("registerInput", registerInput);
 </script>
 
 <style lang="scss" scoped>
@@ -56,6 +77,6 @@ defineEmits(["handleReturnPage", "handleValidateForm"]);
   left: 50%;
   transform: translate(-50%, -50%);
 
-  width: 350px;
+  width: 300px;
 }
 </style>

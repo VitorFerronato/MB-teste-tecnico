@@ -1,24 +1,21 @@
 <template>
   <div id="app">
-    == STEPS {{ steps }}
-    <br />
-    == CURRENT {{ currentStep }}
     <Step1EmailView
       v-if="currentStep.step == '1'"
+      :hasReturnButton="false"
       @advanceNextStep="updateNextStep"
     />
 
     <Step2PeopleView
       v-if="currentStep.step == '2-people'"
       @returnPage="returnPage"
-      hasReturnButton
     />
 
-    <Step2CompanyView v-if="currentStep.step == '2-company'" hasReturnButton />
+    <Step2CompanyView v-if="currentStep.step == '2-company'" />
 
-    <Step3PasswordView v-if="currentStep.step == '3'" hasReturnButton />
+    <Step3PasswordView v-if="currentStep.step == '3'" />
 
-    <Step4ReviewView v-if="currentStep.step == '4'" hasReturnButton />
+    <Step4ReviewView v-if="currentStep.step == '4'" />
   </div>
 </template>
 
@@ -54,7 +51,7 @@ const steps = ref([
   },
 ]);
 
-const currentStep = ref(steps.value[0]);
+const currentStep = ref(steps.value[3]);
 
 const updateNextStep = (data) => {
   const foundedStep = steps.value.find((el) => el.step == data.currentStep);

@@ -2,18 +2,19 @@
   <div class="d-flex flex-column ga-1">
     <label class="text-label">{{ title }}</label>
     <input
+      :value="modelValue"
+      :type="type"
+      @input="handleInput"
       type="text"
       class="input-field pa-2"
-      :value="modelValue"
-      @input="handleInput"
     />
     <span v-if="errorMessage" class="error-message">{{ errorMessage }}</span>
   </div>
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref, watch } from "vue";
-import rules from "@/utils/rules.js"; // Importa as regras de validação
+import { defineProps, defineEmits, ref, watch, inject, onMounted } from "vue";
+import rules from "@/utils/rules.js";
 
 const props = defineProps({
   title: {
@@ -25,15 +26,18 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  type: {
+    type: String,
+    default: "text",
+  },
 });
 
 const emit = defineEmits(["update:modelValue"]);
 const errorMessage = ref("");
 
-// Função para validar o input
-const validate = (value) => {
+const validate = () => {
   for (let ruleName of props.rules) {
-    const rule = typeof ruleName === "function" ? ruleName : rules[ruleName]; // Busca a função pelo nome
+    const rule = typeof ruleName === "function" ? ruleName : rules[ruleName];
 
     if (!rule) {
       console.warn(
@@ -42,32 +46,34 @@ const validate = (value) => {
       continue;
     }
 
-    const result = rule(value);
+    const result = rule(props.modelValue);
     if (result !== true) {
-      errorMessage.value = result; // Se a regra falhar, exibe a mensagem de erro
-      return;
+      errorMessage.value = result;
+      return false;
     }
   }
-  errorMessage.value = ""; // Se todas as regras passarem, limpa a mensagem de erro
+  errorMessage.value = "";
+  return true;
 };
 
-// Manipula a entrada do usuário
 const handleInput = (event) => {
   const value = event.target.value;
   emit("update:modelValue", value);
-  validate(value);
+  validate();
 };
 
-// Valida quando `modelValue` muda
-watch(
-  () => props.modelValue,
-  (newValue) => {
-    validate(newValue);
+watch(() => props.modelValue, validate);
+
+const registerInput = inject("registerInput", null);
+
+onMounted(() => {
+  if (registerInput) {
+    registerInput({ validate });
   }
-);
+});
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .input-field {
   background-color: transparent;
   border-radius: 4px;
