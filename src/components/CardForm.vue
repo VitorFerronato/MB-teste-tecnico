@@ -19,7 +19,7 @@
       <MBButton
         :class="['mt-4', hasReturnButton ? 'w-50' : 'w-100']"
         :loading="loading"
-        title="Confirmar"
+        :title="buttonTitle"
         type="submit"
       />
     </div>
@@ -47,6 +47,10 @@ defineProps({
   loading: {
     type: Boolean,
     default: false,
+  },
+  buttonTitle: {
+    type: String,
+    default: "Continuar",
   },
 });
 

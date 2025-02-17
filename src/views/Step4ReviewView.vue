@@ -3,6 +3,7 @@
     title="Revise suas informações"
     step="4"
     :loading="isLoading"
+    buttonTitle="Cadastrar"
     @formIsValid="createUser"
     @handleReturnPage="emits('handleReturnPage', 4)"
   >
