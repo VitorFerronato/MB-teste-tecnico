@@ -1,38 +1,38 @@
 <template>
   <div id="app">
-    <!-- <div class="d-flex flex-column">
-      <span v-for="(step, index) in steps" :key="index"> {{ step }} </span>
-    </div> -->
+    <transition name="fade" mode="out-in">
+      <div :key="currentStep.step">
+        <Step1EmailView
+          v-if="currentStep.step == '1'"
+          :hasReturnButton="false"
+          @advanceNextStep="updateNextStep"
+        />
 
-    <Step1EmailView
-      v-if="currentStep.step == '1'"
-      :hasReturnButton="false"
-      @advanceNextStep="updateNextStep"
-    />
+        <Step2PeopleView
+          v-if="currentStep.step == '2-people'"
+          @advanceNextStep="updateNextStep"
+          @handleReturnPage="returnPage"
+        />
 
-    <Step2PeopleView
-      v-if="currentStep.step == '2-people'"
-      @advanceNextStep="updateNextStep"
-      @handleReturnPage="returnPage"
-    />
+        <Step2CompanyView
+          v-if="currentStep.step == '2-company'"
+          @advanceNextStep="updateNextStep"
+          @handleReturnPage="returnPage"
+        />
 
-    <Step2CompanyView
-      v-if="currentStep.step == '2-company'"
-      @advanceNextStep="updateNextStep"
-      @handleReturnPage="returnPage"
-    />
+        <Step3PasswordView
+          v-if="currentStep.step == '3'"
+          @advanceNextStep="updateNextStep"
+          @handleReturnPage="returnPage"
+        />
 
-    <Step3PasswordView
-      v-if="currentStep.step == '3'"
-      @advanceNextStep="updateNextStep"
-      @handleReturnPage="returnPage"
-    />
-
-    <Step4ReviewView
-      v-if="currentStep.step == '4'"
-      :registrationData="steps"
-      @handleReturnPage="returnPage"
-    />
+        <Step4ReviewView
+          v-if="currentStep.step == '4'"
+          :registrationData="steps"
+          @handleReturnPage="returnPage"
+        />
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -101,5 +101,14 @@ const handlePageTwo = () => {
   width: 100vw;
   height: 100vh;
   position: relative;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
