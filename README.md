@@ -28,6 +28,10 @@ Também me preocupei em dividir as responsabilidades de lógica entre os compone
 No terminal
 
 ```
+npm run build
+```
+
+```
 cd server
 ```
 
