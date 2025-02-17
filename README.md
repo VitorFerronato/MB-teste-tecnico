@@ -32,7 +32,7 @@ cd server
 ```
 
 ```bash
-cd install
+npm install
 ```
 
 ```bash
