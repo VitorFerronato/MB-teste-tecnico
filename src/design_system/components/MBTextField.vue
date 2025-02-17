@@ -1,13 +1,15 @@
 <template>
   <div class="d-flex flex-column ga-1">
     <label class="text-label">{{ title }}</label>
-    <input
-      :value="modelValue"
-      :type="type"
-      @input="handleInput"
-      type="text"
-      class="input-field pa-2"
-    />
+    <div class="input-wrapper">
+      <input
+        :value="modelValue"
+        :type="isPasswordVisible ? 'text' : type"
+        @input="handleInput"
+        class="input-field pa-2"
+      />
+      <slot name="icon"></slot>
+    </div>
     <span v-if="errorMessage" class="error-message">{{ errorMessage }}</span>
   </div>
 </template>
@@ -34,6 +36,7 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue"]);
 const errorMessage = ref("");
+const isPasswordVisible = ref(false);
 
 const validate = () => {
   for (let ruleName of props.rules) {
@@ -74,16 +77,32 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .input-field {
+  flex: 1;
   background-color: transparent;
   border-radius: 4px;
   border: 1px solid #ccc;
   padding: 8px;
+  padding-right: 30px;
 }
 
 .error-message {
   color: red;
   font-size: 12px;
-  margin-top: 4px;
+  margin-top: 2px;
+}
+
+.icon-button {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 </style>

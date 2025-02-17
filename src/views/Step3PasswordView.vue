@@ -9,10 +9,25 @@
       <MBTextField
         v-model="form.password"
         :rules="['rulesRequired', 'rulesPassword']"
+        :type="showPassword ? 'text' : 'password'"
         title="Sua senha"
-        type="password"
         class="mt-4"
-      />
+      >
+        <template v-slot:icon>
+          <img
+            v-show="showPassword"
+            src="../assets/tabler--eye.svg"
+            @click="showPassword = !showPassword"
+            class="ml-2 cursor-pointer icon-button"
+          />
+          <img
+            v-show="!showPassword"
+            src="../assets/tabler--eye-off.svg"
+            @click="showPassword = !showPassword"
+            class="ml-2 cursor-pointer icon-button"
+          />
+        </template>
+      </MBTextField>
     </template>
   </CardForm>
 </template>
@@ -24,6 +39,8 @@ import CardForm from "@/components/CardForm.vue";
 import { ref, defineEmits } from "vue";
 
 const emits = defineEmits(["advanceNextStep", "handleReturnPage"]);
+
+const showPassword = ref(false);
 
 const form = ref({
   password: "",

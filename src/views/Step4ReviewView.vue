@@ -49,11 +49,26 @@
         />
         <MBTextField
           v-model="form.password"
-          :rules="['rulesRequired']"
-          title="Senha"
-          type="password"
+          :rules="['rulesRequired', 'rulesPassword']"
+          :type="showPassword ? 'text' : 'password'"
+          title="Sua senha"
           class="mt-4"
-        />
+        >
+          <template v-slot:icon>
+            <img
+              v-show="showPassword"
+              src="../assets/tabler--eye.svg"
+              @click="showPassword = !showPassword"
+              class="ml-2 cursor-pointer"
+            />
+            <img
+              v-show="!showPassword"
+              src="../assets/tabler--eye-off.svg"
+              @click="showPassword = !showPassword"
+              class="ml-2 cursor-pointer"
+            />
+          </template>
+        </MBTextField>
       </form>
     </template>
   </CardForm>
@@ -70,6 +85,8 @@ const props = defineProps({
     type: Object,
   },
 });
+
+const showPassword = ref(false);
 
 const form = ref({
   email: "",
