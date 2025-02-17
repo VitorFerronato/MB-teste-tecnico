@@ -54,9 +54,10 @@ router.post("/registration", (req, res) => {
   }
 
   if (!isValidPassword(password)) {
-    return res
-      .status(400)
-      .json({ error: "A senha deve ter pelo menos 6 caracteres!" });
+    return res.status(400).json({
+      error:
+        "A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, uma minúscula, um número e um símbolo!",
+    });
   }
 
   console.log("Dados válidos recebidos:", req.body);

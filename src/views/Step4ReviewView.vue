@@ -2,6 +2,7 @@
   <CardForm
     title="Revise suas informações"
     step="4"
+    :loading="isLoading"
     @formIsValid="createUser"
     @handleReturnPage="emits('handleReturnPage', 4)"
   >
@@ -9,7 +10,7 @@
       <form>
         <MBTextField
           v-model="form.email"
-          :rules="['rulesRequired']"
+          :rules="['rulesRequired', 'rulesEmail']"
           title="Endereço de email"
           class="mt-4"
         />
@@ -70,6 +71,10 @@
           </template>
         </MBTextField>
       </form>
+
+      <div class="text-center text-small color-error mt-2">
+        <span>{{ errorText }}</span>
+      </div>
     </template>
   </CardForm>
 </template>
@@ -85,16 +90,20 @@ const props = defineProps({
     type: Object,
   },
 });
+const emits = defineEmits(["handleReturnPage", "userCreated"]);
 
 const showPassword = ref(false);
+let isLoading = ref(false);
+const errorText = ref("");
 
 const form = ref({
   email: "",
   name: "",
   registration: "",
+  creationDate: "",
+  phoneNumber: "",
+  password: "",
 });
-
-const emits = defineEmits(["handleReturnPage"]);
 
 const openingType = computed(() => {
   const step1 = props.registrationData.find((el) => el.step == "1");
@@ -120,7 +129,26 @@ const fillInputs = () => {
 };
 
 const createUser = async () => {
-  console.log(form.value);
+  isLoading.value = true;
+  errorText.value = "";
+
+  try {
+    const response = await fetch("http://localhost:3000/api/registration", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form.value),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) throw new Error(data.error || "Erro ao cadastrar");
+
+    emits("userCreated", form.value);
+  } catch (error) {
+    errorText.value = error.message;
+  }
+
+  isLoading.value = false;
 };
 
 onMounted(() => {

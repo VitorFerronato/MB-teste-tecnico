@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="validateForm" class="card">
+  <form @submit.prevent="validateForm" :class="['card', { loading: loading }]">
     <p class="text-caption mb-2">
       Etapa <span class="color-destaq">{{ step }}</span> de 4
     </p>
@@ -18,6 +18,7 @@
       />
       <MBButton
         :class="['mt-4', hasReturnButton ? 'w-50' : 'w-100']"
+        :loading="loading"
         title="Confirmar"
         type="submit"
       />
@@ -35,15 +36,17 @@ defineProps({
     type: String,
     required: true,
   },
-
   title: {
     type: String,
     required: true,
   },
-
   hasReturnButton: {
     type: Boolean,
     default: true,
+  },
+  loading: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -79,5 +82,10 @@ provide("registerInput", registerInput);
   transform: translate(-50%, -50%);
 
   width: 300px;
+}
+
+.loading {
+  pointer-events: none;
+  opacity: 0.7;
 }
 </style>
