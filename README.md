@@ -27,12 +27,12 @@ Também me preocupei em dividir as responsabilidades de lógica entre os compone
 
 No terminal
 
-```
-npm run build
+```bash
+cd server
 ```
 
-```
-cd server
+```bash
+cd install
 ```
 
 ```bash
